@@ -1,13 +1,13 @@
-"use client";
+'use client'
 
-import axios from "axios";
-import { Check, Zap } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import axios from 'axios'
+import { Check, Zap } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
@@ -15,29 +15,29 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { TOOLS } from "@/constants";
-import { useProModal } from "@/hooks/use-pro-modal";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dialog'
+import { TOOLS } from '@/constants'
+import { useProModal } from '@/hooks/use-pro-modal'
+import { cn } from '@/lib/utils'
 
 export const ProModal = () => {
-  const proModal = useProModal();
-  const [isLoading, setIsLoading] = useState(false);
+  const proModal = useProModal()
+  const [isLoading, setIsLoading] = useState(false)
 
   const onSubscribe = async () => {
     try {
-      setIsLoading(true);
+      setIsLoading(true)
 
-      const response = await axios.get("/api/stripe");
+      const response = await axios.get('/api/stripe')
 
-      window.location.href = response.data.url;
+      window.location.href = response.data.url
     } catch (error: unknown) {
-      toast.error("Something went wrong.");
-      console.error("[STRIPE_CLIENT_ERROR]: ", error);
+      toast.error('Something went wrong.')
+      console.error('[STRIPE_CLIENT_ERROR]: ', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <Dialog open={isLoading || proModal.isOpen} onOpenChange={proModal.onClose}>
@@ -45,7 +45,7 @@ export const ProModal = () => {
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center flex-col gap-y-4 pb-2">
             <div className="flex items-center gap-x-2 font-bold py-1">
-              Upgrade to Genius
+              Upgrade to Jarvis
               <Badge className="uppercase text-sm py-1" variant="premium">
                 pro
               </Badge>
@@ -53,14 +53,14 @@ export const ProModal = () => {
           </DialogTitle>
 
           <DialogDescription className="text-center pt-2 space-y-2 text-zinc-900 font-medium">
-            {TOOLS.map((tool) => (
+            {TOOLS.map(tool => (
               <Card
                 key={tool.label}
                 className="p-3 border-black/5 flex items-center justify-between"
               >
                 <div className="flex items-center gap-x-4">
-                  <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
-                    <tool.icon className={cn("w-6 h-6", tool.color)} />
+                  <div className={cn('p-2 w-fit rounded-md', tool.bgColor)}>
+                    <tool.icon className={cn('w-6 h-6', tool.color)} />
                   </div>
 
                   <div className="font-semibold text-sm">{tool.label}</div>
@@ -87,5 +87,5 @@ export const ProModal = () => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
