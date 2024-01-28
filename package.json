@@ -1,5 +1,5 @@
 {
-  "name": "genius-ai",
+  "name": "jarvis-ai",
   "version": "1.0.1",
   "private": true,
   "scripts": {
@@ -20,7 +20,7 @@
     "nextjs",
     "netlify",
     "react",
-    "genius-ai",
+    "jarvis-ai",
     "artifical-intelligence",
     "video-generation",
     "music-generation",

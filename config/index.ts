@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 
 export const siteConfig: Metadata = {
-  title: 'Genius',
+  title: 'Jarvis AI',
   description: 'A Modern Next.js 14 SaaS AI Platform.',
   keywords: [
     'reactjs',
     'nextjs',
     'netlify',
     'react',
-    'genius-ai',
+    'jarvis-ai',
     'artifical-intelligence',
     'shadcn',
     'shadcn-ui',
@@ -38,11 +38,11 @@ export const siteConfig: Metadata = {
     'css',
   ] as Array<string>,
   authors: {
-    name: 'Sanidhya Kumar Verma',
+    name: 'Aftab Rehan',
     url: 'https://github.com/aftabrehan',
   },
 } as const
 
 export const links = {
-  sourceCode: 'https://github.com/aftabrehan/genius-ai',
+  sourceCode: 'https://github.com/aftabrehan/jarvis-ai',
 } as const
