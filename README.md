@@ -126,16 +126,8 @@ Create [PlanetScale](https://planetscale.com) or [Aiven](https://aiven.io) accou
 DATABASE_URL="mysql://<username>:<password>@<host>:<port>/<database_name>?ssl-mode=REQUIRED"
 ```
 
-#### 11. Setup Prisma
-
-Add MySQL Database (PlanetScale/Aiven). Run `npm install` or `yarn install` and then run the following command to push the queries in the database.
-
-```
-npx prisma db push
-```
-
-12. Open terminal in root directory. Run `npm install --legacy-peer-deps` or `yarn install --legacy-peer-deps`.
-
+11. Open terminal in root directory. Run `npm install --legacy-peer-deps` or `yarn install --legacy-peer-deps`.
+12. Setup Prisma by adding `MySQL` Database (PlanetScale/Aiven). Run `npx prisma db push` or `yarn prisma db push` to push the queries in the database.
 13. Now, the app is fully configured 👍, and you can start using this app with either `npm run dev` or `yarn dev`.
 
 > [!IMPORTANT]
