@@ -1,14 +1,15 @@
-"use client";
+'use client'
 
-import { ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation'
+import { ArrowRight } from 'lucide-react'
 
-import { Card } from "@/components/ui/card";
-import { TOOLS } from "@/constants";
-import { cn } from "@/lib/utils";
+import { Card } from '@/components/ui/card'
+
+import { TOOLS } from '@/constants'
+import { cn } from '@/lib/utils'
 
 const DashboardPage = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <div>
@@ -22,15 +23,15 @@ const DashboardPage = () => {
       </div>
 
       <div className="px-4 md:px-20 lg:px-32 space-y-4">
-        {TOOLS.map((tool) => (
+        {TOOLS.map(tool => (
           <Card
             key={tool.href}
             className="p-4 border-black/5 flex items-center justify-between hover:shadow-md transition cursor-pointer"
             onClick={() => router.push(tool.href)}
           >
             <div className="flex items-center gap-x-4">
-              <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
-                <tool.icon className={cn("w-8 h-8", tool.color)} />
+              <div className={cn('p-2 w-fit rounded-md', tool.bgColor)}>
+                <tool.icon className={cn('w-8 h-8', tool.color)} />
               </div>
 
               <div className="font-semibold">{tool.label}</div>
@@ -41,7 +42,7 @@ const DashboardPage = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DashboardPage;
+export default DashboardPage

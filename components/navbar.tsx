@@ -1,13 +1,13 @@
-import { UserButton } from "@clerk/nextjs";
+import { UserButton } from '@clerk/nextjs'
 
-import { getApiLimitCount } from "@/lib/api-limit";
-import { checkSubscription } from "@/lib/subscription";
+import { MobileSidebar } from '@/components/mobile-sidebar'
 
-import { MobileSidebar } from "./mobile-sidebar";
+import { getApiLimitCount } from '@/lib/api-limit'
+import { checkSubscription } from '@/lib/subscription'
 
 export const Navbar = async () => {
-  const apiLimitCount = await getApiLimitCount();
-  const isPro = await checkSubscription();
+  const apiLimitCount = await getApiLimitCount()
+  const isPro = await checkSubscription()
 
   return (
     <div className="flex items-center p-4">
@@ -17,5 +17,5 @@ export const Navbar = async () => {
         <UserButton afterSignOutUrl="/" />
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,55 +1,54 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { VideoIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { VideoIcon } from 'lucide-react'
 
-import { Empty } from "@/components/empty";
-import { Heading } from "@/components/heading";
-import { Loader } from "@/components/loader";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useProModal } from "@/hooks/use-pro-modal";
-import { videoFormSchema } from "@/schemas";
+import { Empty } from '@/components/empty'
+import { Heading } from '@/components/heading'
+import { Loader } from '@/components/loader'
+import { Button } from '@/components/ui/button'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+
+import { useProModal } from '@/hooks/use-pro-modal'
+import { videoFormSchema } from '@/schemas'
 
 const VideoPage = () => {
-  const proModal = useProModal();
-  const router = useRouter();
-  const [video, setVideo] = useState<string>();
+  const proModal = useProModal()
+  const router = useRouter()
+  const [video, setVideo] = useState<string>()
 
   const form = useForm<z.infer<typeof videoFormSchema>>({
     resolver: zodResolver(videoFormSchema),
-    defaultValues: {
-      prompt: "",
-    },
-  });
+    defaultValues: { prompt: '' },
+  })
 
-  const isLoading = form.formState.isSubmitting;
+  const isLoading = form.formState.isSubmitting
 
   const onSubmit = async (values: z.infer<typeof videoFormSchema>) => {
     try {
-      setVideo(undefined);
+      setVideo(undefined)
 
-      const response = await axios.post("/api/video", values);
+      const response = await axios.post('/api/video', values)
 
-      setVideo(response.data[0]);
+      setVideo(response.data[0])
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error?.response?.status === 403)
-        proModal.onOpen();
-      else toast.error("Something went wrong.");
+        proModal.onOpen()
+      else toast.error('Something went wrong.')
 
-      console.error(error);
+      console.error(error)
     } finally {
-      form.reset();
-      router.refresh();
+      form.reset()
+      router.refresh()
     }
-  };
+  }
 
   return (
     <div>
@@ -117,7 +116,7 @@ const VideoPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default VideoPage;
+export default VideoPage

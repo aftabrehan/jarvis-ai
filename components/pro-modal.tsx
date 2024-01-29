@@ -1,9 +1,9 @@
 'use client'
 
-import axios from 'axios'
-import { Check, Zap } from 'lucide-react'
 import { useState } from 'react'
+import axios from 'axios'
 import { toast } from 'sonner'
+import { Check, Zap } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -16,9 +16,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { TOOLS } from '@/constants'
+
 import { useProModal } from '@/hooks/use-pro-modal'
 import { cn } from '@/lib/utils'
+import { TOOLS } from '@/constants'
 
 export const ProModal = () => {
   const proModal = useProModal()
@@ -62,11 +63,10 @@ export const ProModal = () => {
                   <div className={cn('p-2 w-fit rounded-md', tool.bgColor)}>
                     <tool.icon className={cn('w-6 h-6', tool.color)} />
                   </div>
-
                   <div className="font-semibold text-sm">{tool.label}</div>
                 </div>
 
-                <Check className="text-primary w-5 h-5" />
+                <Check className="text-green-500 w-5 h-5" />
               </Card>
             ))}
           </DialogDescription>

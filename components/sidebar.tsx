@@ -1,19 +1,16 @@
 'use client'
 
-import { Montserrat } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-
-import { ROUTES } from '@/constants'
-import { cn } from '@/lib/utils'
+import { Montserrat } from 'next/font/google'
 
 import { FreeCounter } from './free-counter'
 
-const montserrat = Montserrat({
-  weight: '600',
-  subsets: ['latin'],
-})
+import { cn } from '@/lib/utils'
+import { ROUTES } from '@/constants'
+
+const montserrat = Montserrat({ weight: '600', subsets: ['latin'] })
 
 type SidebarProps = {
   apiLimitCount: number

@@ -1,19 +1,16 @@
 'use client'
 
-import { useAuth } from '@clerk/nextjs'
-import { Github } from 'lucide-react'
-import { Montserrat } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Montserrat } from 'next/font/google'
+import { useAuth } from '@clerk/nextjs'
+import { ArrowRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { links } from '@/config'
+
 import { cn } from '@/lib/utils'
 
-const font = Montserrat({
-  weight: '600',
-  subsets: ['latin'],
-})
+const font = Montserrat({ weight: '600', subsets: ['latin'] })
 
 export const LandingNavbar = () => {
   const { isSignedIn } = useAuth()
@@ -30,21 +27,12 @@ export const LandingNavbar = () => {
         </h1>
       </Link>
 
-      <div className="flex items-center gap-x-2">
-        <Button variant="outline" className="rounded-full" asChild>
-          <Link href={isSignedIn ? '/dashboard' : '/sign-up'}>Get Started</Link>
-        </Button>
-
-        <Button className="rounded-full" asChild>
-          <Link
-            href={links.sourceCode}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            <Github className="h-5 w-5" />
-          </Link>
-        </Button>
-      </div>
+      <Button className="rounded-full gap-x-1" asChild>
+        <Link href={isSignedIn ? '/dashboard' : '/sign-up'}>
+          {isSignedIn ? 'Go to Dashboard' : 'Get started'}
+          <ArrowRight />
+        </Link>
+      </Button>
     </nav>
   )
 }

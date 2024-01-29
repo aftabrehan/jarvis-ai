@@ -1,55 +1,54 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { Music } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { Music } from 'lucide-react'
 
-import { Empty } from "@/components/empty";
-import { Heading } from "@/components/heading";
-import { Loader } from "@/components/loader";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useProModal } from "@/hooks/use-pro-modal";
-import { musicFormSchema } from "@/schemas";
+import { Empty } from '@/components/empty'
+import { Heading } from '@/components/heading'
+import { Loader } from '@/components/loader'
+import { Button } from '@/components/ui/button'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+
+import { useProModal } from '@/hooks/use-pro-modal'
+import { musicFormSchema } from '@/schemas'
 
 const MusicPage = () => {
-  const proModal = useProModal();
-  const router = useRouter();
-  const [music, setMusic] = useState<string>();
+  const proModal = useProModal()
+  const router = useRouter()
+  const [music, setMusic] = useState<string>()
 
   const form = useForm<z.infer<typeof musicFormSchema>>({
     resolver: zodResolver(musicFormSchema),
-    defaultValues: {
-      prompt: "",
-    },
-  });
+    defaultValues: { prompt: '' },
+  })
 
-  const isLoading = form.formState.isSubmitting;
+  const isLoading = form.formState.isSubmitting
 
   const onSubmit = async (values: z.infer<typeof musicFormSchema>) => {
     try {
-      setMusic(undefined);
+      setMusic(undefined)
 
-      const response = await axios.post("/api/music", values);
+      const response = await axios.post('/api/music', values)
 
-      setMusic(response.data.audio);
+      setMusic(response.data.audio)
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error?.response?.status === 403)
-        proModal.onOpen();
-      else toast.error("Something went wrong.");
+        proModal.onOpen()
+      else toast.error('Something went wrong.')
 
-      console.error(error);
+      console.error(error)
     } finally {
-      form.reset();
-      router.refresh();
+      form.reset()
+      router.refresh()
     }
-  };
+  }
 
   return (
     <div>
@@ -114,7 +113,7 @@ const MusicPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MusicPage;
+export default MusicPage

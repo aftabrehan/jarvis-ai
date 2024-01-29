@@ -1,12 +1,13 @@
-"use client";
+'use client'
 
-import { useAuth } from "@clerk/nextjs";
-import Link from "next/link";
-import TypewriterComponent from "typewriter-effect";
-import { Button } from "./ui/button";
+import Link from 'next/link'
+import { useAuth } from '@clerk/nextjs'
+import TypewriterComponent from 'typewriter-effect'
+
+import { Button } from '@/components/ui/button'
 
 export const LandingHero = () => {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn } = useAuth()
 
   return (
     <div className="text-white font-bold py-36 text-center space-y-5">
@@ -16,11 +17,11 @@ export const LandingHero = () => {
           <TypewriterComponent
             options={{
               strings: [
-                "Chatbot.",
-                "Photo Generation.",
-                "Music Generation.",
-                "Code Generation.",
-                "Video Generation.",
+                'Chatbot.',
+                'Photo Generation.',
+                'Music Generation.',
+                'Code Generation.',
+                'Video Generation.',
               ],
               autoStart: true,
               loop: true,
@@ -39,7 +40,7 @@ export const LandingHero = () => {
           className="md:text-lg p-4 md:p-6 rounded-full font-semibold"
           asChild
         >
-          <Link href={isSignedIn ? "/dashboard" : "/sign-up"}>
+          <Link href={isSignedIn ? '/dashboard' : '/sign-up'}>
             Start Generating For Free
           </Link>
         </Button>
@@ -49,5 +50,5 @@ export const LandingHero = () => {
         No credit card required.
       </div>
     </div>
-  );
-};
+  )
+}

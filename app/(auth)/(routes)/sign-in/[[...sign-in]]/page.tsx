@@ -1,5 +1,5 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignIn } from '@clerk/nextjs'
 
-export default function Page() {
-  return <SignIn />;
-}
+const SignInPage = () => <SignIn />
+
+export default SignInPage

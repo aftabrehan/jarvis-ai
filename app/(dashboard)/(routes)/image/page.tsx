@@ -1,106 +1,78 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { Download, ImageIcon } from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
+import { Download, ImageIcon } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import * as z from 'zod'
 
-import { Empty } from "@/components/empty";
-import { Heading } from "@/components/heading";
-import { Loader } from "@/components/loader";
-import { Button } from "@/components/ui/button";
-import { Card, CardFooter } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Empty } from '@/components/empty'
+import { Heading } from '@/components/heading'
+import { Loader } from '@/components/loader'
+import { Button } from '@/components/ui/button'
+import { Card, CardFooter } from '@/components/ui/card'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { useProModal } from "@/hooks/use-pro-modal";
-import { imageFormSchema } from "@/schemas";
+} from '@/components/ui/select'
+import { useProModal } from '@/hooks/use-pro-modal'
+import { imageFormSchema } from '@/schemas'
 
 const amountOptions = [
-  {
-    value: "1",
-    label: "1 Photo",
-  },
-  {
-    value: "2",
-    label: "2 Photos",
-  },
-  {
-    value: "3",
-    label: "3 Photos",
-  },
-  {
-    value: "4",
-    label: "4 Photos",
-  },
-  {
-    value: "5",
-    label: "5 Photos",
-  },
-];
+  { value: '1', label: '1 Photo' },
+  { value: '2', label: '2 Photos' },
+  { value: '3', label: '3 Photos' },
+  { value: '4', label: '4 Photos' },
+  { value: '5', label: '5 Photos' },
+]
 
 const resolutionOptions = [
-  {
-    value: "256x256",
-    label: "256x256",
-  },
-  {
-    value: "512x512",
-    label: "512x512",
-  },
-  {
-    value: "1024x1024",
-    label: "1024x1024",
-  },
-];
+  { value: '256x256', label: '256x256' },
+  { value: '512x512', label: '512x512' },
+  { value: '1024x1024', label: '1024x1024' },
+]
 
 const ImagePage = () => {
-  const proModal = useProModal();
-  const router = useRouter();
-  const [images, setImages] = useState<string[]>([]);
+  const proModal = useProModal()
+  const router = useRouter()
+  const [images, setImages] = useState<string[]>([])
 
   const form = useForm<z.infer<typeof imageFormSchema>>({
     resolver: zodResolver(imageFormSchema),
-    defaultValues: {
-      prompt: "",
-      amount: "1",
-      resolution: "512x512",
-    },
-  });
+    defaultValues: { prompt: '', amount: '1', resolution: '512x512' },
+  })
 
-  const isLoading = form.formState.isSubmitting;
+  const isLoading = form.formState.isSubmitting
 
   const onSubmit = async (values: z.infer<typeof imageFormSchema>) => {
     try {
-      setImages([]);
+      setImages([])
 
-      const response = await axios.post("/api/image", values);
+      const response = await axios.post('/api/image', values)
 
-      const urls = response.data.map((image: { url: string }) => image.url);
+      const urls = response.data.map((image: { url: string }) => image.url)
 
-      setImages(urls);
+      setImages(urls)
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error?.response?.status === 403)
-        proModal.onOpen();
-      else toast.error("Something went wrong.");
+        proModal.onOpen()
+      else toast.error('Something went wrong.')
 
-      console.error(error);
+      console.error(error)
     } finally {
-      form.reset();
-      router.refresh();
+      form.reset()
+      router.refresh()
     }
-  };
+  }
 
   return (
     <div>
@@ -156,7 +128,7 @@ const ImagePage = () => {
                       </FormControl>
 
                       <SelectContent>
-                        {amountOptions.map((option) => (
+                        {amountOptions.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -185,7 +157,7 @@ const ImagePage = () => {
                       </FormControl>
 
                       <SelectContent>
-                        {resolutionOptions.map((option) => (
+                        {resolutionOptions.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
@@ -240,7 +212,7 @@ const ImagePage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ImagePage;
+export default ImagePage

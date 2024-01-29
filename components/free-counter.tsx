@@ -1,33 +1,32 @@
-"use client";
+'use client'
 
-import { Zap } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
+import { Zap } from 'lucide-react'
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { MAX_FREE_COUNTS } from "@/constants";
-import { useProModal } from "@/hooks/use-pro-modal";
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { MAX_FREE_COUNTS } from '@/constants'
+import { useProModal } from '@/hooks/use-pro-modal'
 
 type FreeCounterProps = {
-  apiLimitCount: number;
-  isPro: boolean;
-};
+  apiLimitCount: number
+  isPro: boolean
+}
 
 export const FreeCounter = ({
   apiLimitCount = 0,
   isPro = false,
 }: FreeCounterProps) => {
-  const proModal = useProModal();
-  const [isMounted, setIsMounted] = useState(false);
+  const proModal = useProModal()
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    setIsMounted(true)
+  }, [])
 
-  if (!isMounted) return null;
-
-  if (isPro) return null;
+  if (!isMounted) return null
+  if (isPro) return null
 
   return (
     <div className="px-3">
@@ -37,7 +36,6 @@ export const FreeCounter = ({
             <p>
               {apiLimitCount} / {MAX_FREE_COUNTS} Free Generations
             </p>
-
             <Progress
               className="h-3 text-white"
               value={(apiLimitCount / MAX_FREE_COUNTS) * 100}
@@ -55,5 +53,5 @@ export const FreeCounter = ({
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

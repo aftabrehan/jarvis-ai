@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const siteConfig: Metadata = {
   title: 'Jarvis AI',
-  description: 'A Modern Next.js 14 SaaS AI Platform.',
+  description: 'A Modern SaaS AI Platform Build with Next.js 14.',
   keywords: [
     'reactjs',
     'nextjs',
@@ -41,8 +41,4 @@ export const siteConfig: Metadata = {
     name: 'Aftab Rehan',
     url: 'https://github.com/aftabrehan',
   },
-} as const
-
-export const links = {
-  sourceCode: 'https://github.com/aftabrehan/jarvis-ai',
 } as const

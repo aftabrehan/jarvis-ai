@@ -1,66 +1,65 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { MessageSquare } from "lucide-react";
-import { useRouter } from "next/navigation";
-import type { ChatCompletionRequestMessage } from "openai";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { MessageSquare } from 'lucide-react'
+import type { ChatCompletionRequestMessage } from 'openai'
 
-import { BotAvatar } from "@/components/bot-avatar";
-import { Empty } from "@/components/empty";
-import { Heading } from "@/components/heading";
-import { Loader } from "@/components/loader";
-import { UserAvatar } from "@/components/user-avatar";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useProModal } from "@/hooks/use-pro-modal";
-import { cn } from "@/lib/utils";
-import { conversationFormSchema } from "@/schemas";
+import { BotAvatar } from '@/components/bot-avatar'
+import { Empty } from '@/components/empty'
+import { Heading } from '@/components/heading'
+import { Loader } from '@/components/loader'
+import { UserAvatar } from '@/components/user-avatar'
+import { Button } from '@/components/ui/button'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+
+import { useProModal } from '@/hooks/use-pro-modal'
+import { cn } from '@/lib/utils'
+import { conversationFormSchema } from '@/schemas'
 
 const ConversationPage = () => {
-  const proModal = useProModal();
-  const router = useRouter();
-  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+  const proModal = useProModal()
+  const router = useRouter()
+  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([])
 
   const form = useForm<z.infer<typeof conversationFormSchema>>({
     resolver: zodResolver(conversationFormSchema),
-    defaultValues: {
-      prompt: "",
-    },
-  });
+    defaultValues: { prompt: '' },
+  })
 
-  const isLoading = form.formState.isSubmitting;
+  const isLoading = form.formState.isSubmitting
 
   const onSubmit = async (values: z.infer<typeof conversationFormSchema>) => {
     try {
       const userMessage: ChatCompletionRequestMessage = {
-        role: "user",
+        role: 'user',
         content: values.prompt,
-      };
+      }
 
-      const newMessages = [...messages, userMessage];
+      const newMessages = [...messages, userMessage]
 
-      const response = await axios.post("/api/conversation", {
+      const response = await axios.post('/api/conversation', {
         messages: newMessages,
-      });
+      })
 
-      setMessages((current) => [...current, userMessage, response.data]);
+      setMessages(current => [...current, userMessage, response.data])
     } catch (error: any) {
       if (axios.isAxiosError(error) && error?.response?.status === 403)
-        proModal.onOpen();
-      else toast.error("Something went wrong.");
+        proModal.onOpen()
+      else toast.error('Something went wrong.')
 
-      console.error(error);
+      console.error(error)
     } finally {
-      form.reset();
-      router.refresh();
+      form.reset()
+      router.refresh()
     }
-  };
+  }
 
   return (
     <div>
@@ -123,13 +122,13 @@ const ConversationPage = () => {
               <div
                 key={`${i}-${message.content}`}
                 className={cn(
-                  "p-8 w-full flex items-start gap-x-8 rounded-lg",
-                  message.role === "user"
-                    ? "bg-white border border-black/10"
-                    : "bg-muted",
+                  'p-8 w-full flex items-start gap-x-8 rounded-lg',
+                  message.role === 'user'
+                    ? 'bg-white border border-black/10'
+                    : 'bg-muted'
                 )}
               >
-                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                {message.role === 'user' ? <UserAvatar /> : <BotAvatar />}
                 <p className="text-sm">{message.content}</p>
               </div>
             ))}
@@ -137,7 +136,7 @@ const ConversationPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ConversationPage;
+export default ConversationPage

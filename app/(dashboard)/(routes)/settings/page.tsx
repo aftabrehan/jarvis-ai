@@ -1,11 +1,11 @@
-import { Settings } from "lucide-react";
+import { Settings } from 'lucide-react'
 
-import { Heading } from "@/components/heading";
-import { SubscriptionButton } from "@/components/subscription-button";
-import { checkSubscription } from "@/lib/subscription";
+import { Heading } from '@/components/heading'
+import { SubscriptionButton } from '@/components/subscription-button'
+import { checkSubscription } from '@/lib/subscription'
 
 const SettingsPage = async () => {
-  const isPro = await checkSubscription();
+  const isPro = await checkSubscription()
 
   return (
     <div>
@@ -19,15 +19,13 @@ const SettingsPage = async () => {
 
       <div className="px-4 lg:px-8 space-y-4">
         <div className="text-muted-foreground text-sm">
-          {isPro
-            ? "You are currently on a pro plan."
-            : "You are currently on a free plan."}
+          {`You are currently on a ${isPro ? 'pro' : 'free'} plan.`}
         </div>
 
         <SubscriptionButton isPro={isPro} />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SettingsPage;
+export default SettingsPage
