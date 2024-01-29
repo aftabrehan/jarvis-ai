@@ -1,5 +1,7 @@
 # Jarvis AI - A Modern SaaS AI Platform
 
+Complete AI Tools (Chatbot, Image Generation, Music Generation, Video Generation, and Code Generation) SaaS Platform build using Next.js 14, Stripe, OpenAI, ReplicateAI, Crisp, Aiven and Prisma.
+
 ![Jarvis AI - A Modern SaaS AI Platform](/.github/images/thumbnail.png 'Jarvis AI - A Modern SaaS AI Platform')
 
 ## Features
