@@ -135,10 +135,6 @@ DATABASE_URL="mysql://<username>:<password>@<host>:<port>/<database_name>?ssl-mo
 > [!IMPORTANT]
 > Keep your API keys and configuration values secure and do not expose them publicly.
 
-## Tech Stack
-
-[![React JS](https://skillicons.dev/icons?i=react 'React JS')](https://react.dev/ 'React JS') [![Next JS](https://skillicons.dev/icons?i=next 'Next JS')](https://nextjs.org/ 'Next JS') [![Typescript](https://skillicons.dev/icons?i=ts 'Typescript')](https://www.typescriptlang.org/ 'Typescript') [![Tailwind CSS](https://skillicons.dev/icons?i=tailwind 'Tailwind CSS')](https://tailwindcss.com/ 'Tailwind CSS') [![Vercel](https://skillicons.dev/icons?i=vercel 'Vercel')](https://vercel.com/ 'Vercel') [![Prisma](https://skillicons.dev/icons?i=prisma 'Prisma')](https://prisma.io/ 'Prisma') [![MySQL](https://skillicons.dev/icons?i=mysql 'MySQL')](https://mysql.com/ 'MySQL')
-
 ## Screenshots:
 
 ![Modern UI/UX](/.github/images/main-page.png 'Modern UI/UX')
