@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { LoadingSpinner } from '@/components/loading-spinner'
 
 import { useProModal } from '@/hooks/use-pro-modal'
 import { cn } from '@/lib/utils'
@@ -76,13 +77,17 @@ export const ProModal = () => {
           <Button
             size="lg"
             variant="premium"
-            className="w-full"
+            className="w-full gap-x-4"
             onClick={onSubscribe}
             disabled={isLoading}
             aria-disabled={isLoading}
           >
             Upgrade
-            <Zap className="w-4 h-4 ml-4 fill-white" />
+            {isLoading ? (
+              <LoadingSpinner />
+            ) : (
+              <Zap className="w-4 h-4 fill-white" />
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { Zap } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { LoadingSpinner } from '@/components/loading-spinner'
 
 type SubscriptionButtonProps = {
   isPro: boolean
@@ -36,9 +37,11 @@ export const SubscriptionButton = ({
       aria-disabled={isLoading}
       variant={isPro ? 'default' : 'premium'}
       onClick={onClick}
+      className="gap-x-2"
     >
       {isPro ? 'Manage Subscription' : 'Upgrade'}
-      {!isPro && <Zap className="h-4 w-4 ml-2 fill-white" />}
+      {!isPro && !isLoading && <Zap className="h-4 w-4 fill-white" />}
+      {isLoading && <LoadingSpinner />}
     </Button>
   )
 }
