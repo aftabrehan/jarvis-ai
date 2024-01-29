@@ -139,7 +139,7 @@ npx prisma db push
 13. Now, the app is fully configured 👍, and you can start using this app with either `npm run dev` or `yarn dev`.
 
 > [!IMPORTANT]
-> Please make sure to keep your API keys and configuration values secure and do not expose them publicly.
+> Keep your API keys and configuration values secure and do not expose them publicly.
 
 ## Tech Stack
 
@@ -160,4 +160,4 @@ npx prisma db push
 ![Video Generation](/.github/images/video-page.png 'Video Generation')
 
 > [!NOTE]
-> This project is created solely for portfolio purposes, and you are free to use it as you see fit.
+> This project is designed exclusively for portfolio purposes, and you are welcome to utilize it as you deem fit.
