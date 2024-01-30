@@ -1,10 +1,11 @@
 # Jarvis AI - A Modern SaaS AI Platform
 
-Complete AI Tools (Chatbot, Image Generation, Music Generation, Video Generation, and Code Generation) SaaS Platform build using Next.js 14, Stripe, OpenAI, ReplicateAI, Crisp, Aiven and Prisma.
+Complete AI Tools (Chatbot, Image Generation, Music Generation, Video Generation, and Code Generation) SaaS Platform built using Next.js 14, Stripe, OpenAI, ReplicateAI, Crisp, Aiven, and Prisma.
 
 <a href="https://aftabrehan.com/portfolio/modern-saas-ai-platform"><img src="/.github/images/thumbnail.png" alt="project-thumbnail"/></a>
 
-#### [Live Preview](https://jarvis-wex.vercel.app)
+| [View Project 🔥](https://aftabrehan.com/portfolio/modern-saas-ai-platform) | [Live Preview 🚀](https://jarvis-wex.vercel.app) |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 
 ## Features
 
