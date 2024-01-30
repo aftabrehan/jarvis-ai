@@ -149,9 +149,9 @@ DATABASE_URL="mysql://<username>:<password>@<host>:<port>/<database_name>?ssl-mo
 
 ![Image Generation](/.github/images/image-page.png 'Image Generation')
 
-![Code Generation](/.github/images/code-page.png 'Code Generation')
-
 ![Video Generation](/.github/images/video-page.png 'Video Generation')
+
+![Code Generation](/.github/images/code-page.png 'Code Generation')
 
 > [!NOTE]
 > This project is designed exclusively for portfolio purposes, and you are welcome to utilize it as you deem fit.
