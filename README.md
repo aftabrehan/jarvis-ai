@@ -4,6 +4,8 @@ Complete AI Tools (Chatbot, Image Generation, Music Generation, Video Generation
 
 <a href="https://aftabrehan.com/portfolio/modern-saas-ai-platform"><img src="/.github/images/thumbnail.png" alt="project-thumbnail"/></a>
 
+#### [Live Preview](https://jarvis-wex.vercel.app)
+
 ## Features
 
 - Tailwind design
@@ -137,7 +139,9 @@ DATABASE_URL="mysql://<username>:<password>@<host>:<port>/<database_name>?ssl-mo
 
 ## Screenshots:
 
-![Modern UI/UX](/.github/images/main-page.png 'Modern UI/UX')
+![Modern UI/UX](/.github/images/main-image.png 'Modern UI/UX')
+
+![Dashboard](/.github/images/dashboard-page.png 'Dashboard')
 
 ![Conversation Generation](/.github/images/coversation-page.png 'Conversation Generation')
 
@@ -145,7 +149,7 @@ DATABASE_URL="mysql://<username>:<password>@<host>:<port>/<database_name>?ssl-mo
 
 ![Image Generation](/.github/images/image-page.png 'Image Generation')
 
-![Code Generation](/.github/images/image-page.png 'Image Generation')
+![Code Generation](/.github/images/code-page.png 'Code Generation')
 
 ![Video Generation](/.github/images/video-page.png 'Video Generation')
 
