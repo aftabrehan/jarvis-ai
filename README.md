@@ -22,7 +22,7 @@ Complete AI Tools (Chatbot, Image Generation, Music Generation, Video Generation
 - Stripe monthly subscription
 - Free tier with API limiting
 - Writing POST, DELETE, and GET routes in route handlers (app/api)
-- Fetching data in server react components by directly accessing database (WITHOUT API! like Magic!)
+- Fetching data in server react components by directly accessing the database (WITHOUT API! like Magic!)
 - Handling relations between Server and Child components!
 - Folder structure in Next 13 App Router
 - Reusable layouts
@@ -33,7 +33,7 @@ Complete AI Tools (Chatbot, Image Generation, Music Generation, Video Generation
 2. Clone this repository to your local machine.
 
 ```
-git clone https://github.com/aftabrehan/jarvis-ai
+git clone https://github.com/aftabrehan/jarvis-ai.git
 ```
 
 3. Create a `.env` file in the **root** directory and add the following contents to your `.env` file:
