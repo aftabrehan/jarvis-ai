@@ -34,9 +34,9 @@ export const ProModal = () => {
 
       window.location.href = response.data.url
     } catch (error: unknown) {
+      setIsLoading(false)
       toast.error('Something went wrong.')
       console.error('[STRIPE_CLIENT_ERROR]: ', error)
-      setIsLoading(false)
     } finally {
       setTimeout(() => setIsLoading(false), 1500)
     }
