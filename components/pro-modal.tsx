@@ -36,8 +36,9 @@ export const ProModal = () => {
     } catch (error: unknown) {
       toast.error('Something went wrong.')
       console.error('[STRIPE_CLIENT_ERROR]: ', error)
-    } finally {
       setIsLoading(false)
+    } finally {
+      setTimeout(() => setIsLoading(false), 1500)
     }
   }
 
