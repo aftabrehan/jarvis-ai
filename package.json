@@ -67,7 +67,7 @@
     "email": "workwithaftabrehan@gmail.com"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.31.8",
+    "@clerk/nextjs": "^7.0.12",
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.8.0",
     "@radix-ui/react-avatar": "^1.0.4",
