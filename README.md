@@ -1,6 +1,6 @@
 # Jarvis AI - A Modern SaaS AI Platform
 
-Complete AI Tools (Chatbot, Image Generation, Music Generation, Video Generation, and Code Generation) SaaS Platform built using Next.js 14, Stripe, OpenAI, ReplicateAI, Crisp, Aiven, and Prisma.
+An AI SaaS platform with conversation, image, music, video, and code generation, built with Next.js 16, React 19, Clerk, Stripe, OpenAI, Replicate, and Prisma.
 
 <a href="https://aftabrehan.com/portfolio/modern-saas-ai-platform"><img src="/.github/images/thumbnail.png" alt="project-thumbnail"/></a>
 
@@ -30,48 +30,23 @@ Complete AI Tools (Chatbot, Image Generation, Music Generation, Video Generation
 
 ## Getting Started
 
-1. Ensure that **Git** and **NodeJS (18.x.x)** are installed on your system.
+1. Install **Git** and **Node.js 20.9 or newer**. Node.js 20 LTS is recommended.
 2. Clone this repository to your local machine.
 
 ```
 git clone https://github.com/aftabrehan/jarvis-ai.git
 ```
 
-3. Create a `.env` file in the **root** directory and add the following contents to your `.env` file:
+3. Install dependencies, copy the environment template, and fill in your credentials:
 
-```env
-# Disable Next.js telemetry
-NEXT_TELEMETRY_DISABLED=1
-
-# Clerk redirect URIs
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-CLERK_SECRET_KEY=sk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-# Clerk redirect URIs
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
-
-# OpenAI API key
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-# Replicate API token
-REPLICATE_API_TOKEN=r8_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-# PlanetScale/Aiven database URL
-DATABASE_URL="mysql://<username>:<password>@<host>:<port>/<database_name>?ssl-mode=REQUIRED"
-
-# Stripe API/webhook secret keys
-STRIPE_API_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-# App base URL
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-# Crisp website ID
-NEXT_PUBLIC_CRISP_WEBSITE_ID=xxxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx
+```bash
+npm install
+cp .env.example .env
 ```
+
+The model variables in `.env.example` have working defaults. Replicate model IDs can be overridden without changing source code.
+
+`ENABLE_DEMO_FALLBACK=true` keeps the portfolio usable when an AI key is missing, invalid, out of quota, or its provider is unavailable. Demo responses are clearly labeled in the UI. Set it to `false` when you want provider failures returned as API errors instead.
 
 #### 4. Clerk Authentication Keys
 
@@ -79,8 +54,8 @@ NEXT_PUBLIC_CRISP_WEBSITE_ID=xxxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx
 - Log in to your Clerk account or sign up if you don't have one.
 - Navigate to the "Projects" section and select your project.
 - Go to the "API Keys" tab.
-- Copy the "Publishable Key" and replace `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` in the `.env.local` file with the copied key.
-- Copy the "Secret Key" and replace CLERK_SECRET_KEY in the `.env.local` file with the copied key.
+- Copy the "Publishable Key" into `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` in `.env`.
+- Copy the "Secret Key" into `CLERK_SECRET_KEY` in `.env`.
 
 #### 5. OpenAI API Key
 
@@ -131,9 +106,16 @@ Create [PlanetScale](https://planetscale.com) or [Aiven](https://aiven.io) accou
 DATABASE_URL="mysql://<username>:<password>@<host>:<port>/<database_name>?ssl-mode=REQUIRED"
 ```
 
-11. Open terminal in root directory. Run `npm install --legacy-peer-deps` or `yarn install --legacy-peer-deps`.
-12. Setup Prisma by adding `MySQL` Database (PlanetScale/Aiven). Run `npx prisma db push` or `yarn prisma db push` to push the queries in the database.
-13. Now, the app is fully configured 👍, and you can start using this app with either `npm run dev` or `yarn dev`.
+11. Apply the Prisma schema to your MySQL database with `npx prisma db push`.
+12. Start development with `npm run dev`.
+
+Before deploying, run the full verification suite:
+
+```bash
+npm run check
+```
+
+This runs ESLint, TypeScript, and a production build. The production build uses Next.js's supported webpack builder for deterministic CI behavior.
 
 > [!IMPORTANT]
 > Keep your API keys and configuration values secure and do not expose them publicly.

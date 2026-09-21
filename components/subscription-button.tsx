@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import axios from 'axios'
 import { toast } from 'sonner'
 import { Zap } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/loading-spinner'
+import { getJson, isApiError } from '@/lib/api-client'
 
 type SubscriptionButtonProps = {
   isPro: boolean
@@ -20,15 +20,15 @@ export const SubscriptionButton = ({
   const onClick = async () => {
     try {
       setIsLoading(true)
-      const response = await axios.get('/api/stripe')
+      const response = await getJson<{ url: string }>('/api/stripe')
 
-      window.location.href = response.data.url
+      window.location.assign(response.url)
     } catch (error: unknown) {
       setIsLoading(false)
-      toast.error('Something went wrong.')
+      toast.error(isApiError(error) ? error.message : 'Something went wrong.')
       console.error('[BILLING_ERROR]: ', error)
     } finally {
-      setTimeout(() => setIsLoading(false), 1500)
+      setIsLoading(false)
     }
   }
 

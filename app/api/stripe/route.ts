@@ -1,19 +1,26 @@
-import { auth, currentUser } from '@clerk/nextjs'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 import { db } from '@/lib/db'
 import { stripe } from '@/lib/stripe'
 import { absoluteUrl } from '@/lib/utils'
+import { jsonError } from '@/lib/api-response'
 
 const settingsUrl = absoluteUrl('/settings')
 
 export async function GET() {
   try {
-    const { userId } = auth()
+    const { userId } = await auth()
     const user = await currentUser()
 
-    if (!userId || !user)
-      return new NextResponse('Unauthorized.', { status: 401 })
+    if (!userId || !user) return jsonError('Unauthorized.', 401)
+    if (!process.env.STRIPE_API_SECRET_KEY)
+      return jsonError('Stripe is not configured.', 503)
+
+    const email =
+      user.primaryEmailAddress?.emailAddress ??
+      user.emailAddresses[0]?.emailAddress
+    if (!email) return jsonError('Your account needs an email address.', 400)
 
     const userSubscription = await db.userSubscription.findUnique({
       where: {
@@ -27,9 +34,7 @@ export async function GET() {
         return_url: settingsUrl,
       })
 
-      return new NextResponse(JSON.stringify({ url: stripeSession.url }), {
-        status: 200,
-      })
+      return NextResponse.json({ url: stripeSession.url })
     }
 
     const stripeSession = await stripe.checkout.sessions.create({
@@ -38,7 +43,10 @@ export async function GET() {
       payment_method_types: ['card'],
       mode: 'subscription',
       billing_address_collection: 'auto',
-      customer_email: user.emailAddresses[0].emailAddress,
+      customer_email: email,
+      subscription_data: {
+        metadata: { userId },
+      },
       line_items: [
         {
           price_data: {
@@ -60,11 +68,12 @@ export async function GET() {
       },
     })
 
-    return new NextResponse(JSON.stringify({ url: stripeSession.url }), {
-      status: 200,
-    })
+    if (!stripeSession.url)
+      return jsonError('Stripe did not return a checkout URL.', 502)
+
+    return NextResponse.json({ url: stripeSession.url })
   } catch (error: unknown) {
     console.error('[STRIPE_ERROR]: ', error)
-    return new NextResponse('Internal server error.', { status: 500 })
+    return jsonError('Unable to open billing right now.', 500)
   }
 }

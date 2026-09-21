@@ -3,14 +3,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Montserrat } from 'next/font/google'
 
 import { FreeCounter } from './free-counter'
 
 import { cn } from '@/lib/utils'
 import { ROUTES } from '@/constants'
-
-const montserrat = Montserrat({ weight: '600', subsets: ['latin'] })
 
 type SidebarProps = {
   apiLimitCount: number
@@ -25,12 +22,10 @@ export const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
       <div className="px-3 py-2 flex-1">
         <Link href="/dashboard" className="flex items-center pl-3 mb-14">
           <div className="relative w-8 h-8 mr-4">
-            <Image src="/logo.png" alt="Jarvis logo" fill />
+            <Image src="/logo.png" alt="Jarvis logo" fill sizes="32px" />
           </div>
 
-          <h1 className={cn('text-2xl font-bold', montserrat.className)}>
-            Jarvis
-          </h1>
+          <h1 className="text-2xl font-bold">Jarvis</h1>
         </Link>
 
         <div className="space-y-1">

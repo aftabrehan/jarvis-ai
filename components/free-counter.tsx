@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { Zap } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -19,13 +18,7 @@ export const FreeCounter = ({
   isPro = false,
 }: FreeCounterProps) => {
   const proModal = useProModal()
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted || isPro) return null
+  if (isPro) return null
 
   return (
     <div className="px-3">

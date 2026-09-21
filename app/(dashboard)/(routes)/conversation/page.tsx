@@ -2,16 +2,15 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import axios from 'axios'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { MessageSquare } from 'lucide-react'
-import type { ChatCompletionRequestMessage } from 'openai'
 
 import { BotAvatar } from '@/components/bot-avatar'
 import { Empty } from '@/components/empty'
+import { DemoNotice } from '@/components/demo-notice'
 import { Heading } from '@/components/heading'
 import { Loader } from '@/components/loader'
 import { UserAvatar } from '@/components/user-avatar'
@@ -21,12 +20,14 @@ import { Input } from '@/components/ui/input'
 
 import { useProModal } from '@/hooks/use-pro-modal'
 import { cn } from '@/lib/utils'
+import { isApiError, postJson } from '@/lib/api-client'
+import type { ChatMessage } from '@/lib/chat'
 import { conversationFormSchema } from '@/schemas'
 
 const ConversationPage = () => {
   const proModal = useProModal()
   const router = useRouter()
-  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>([])
 
   const form = useForm<z.infer<typeof conversationFormSchema>>({
     resolver: zodResolver(conversationFormSchema),
@@ -37,22 +38,22 @@ const ConversationPage = () => {
 
   const onSubmit = async (values: z.infer<typeof conversationFormSchema>) => {
     try {
-      const userMessage: ChatCompletionRequestMessage = {
+      const userMessage: ChatMessage = {
         role: 'user',
         content: values.prompt,
       }
 
       const newMessages = [...messages, userMessage]
 
-      const response = await axios.post('/api/conversation', {
+      const response = await postJson<ChatMessage>('/api/conversation', {
         messages: newMessages,
       })
 
-      setMessages(current => [...current, userMessage, response.data])
-    } catch (error: any) {
-      if (axios.isAxiosError(error) && error?.response?.status === 403)
+      setMessages(current => [...current, userMessage, response])
+    } catch (error: unknown) {
+      if (isApiError(error) && error.status === 403)
         proModal.onOpen()
-      else toast.error('Something went wrong.')
+      else toast.error(isApiError(error) ? error.message : 'Something went wrong.')
 
       console.error(error)
     } finally {
@@ -107,6 +108,8 @@ const ConversationPage = () => {
             </form>
           </Form>
         </div>
+
+        {messages.some(message => message.demo) && <DemoNotice />}
 
         <div className="space-y-4 mt-4">
           {isLoading && (

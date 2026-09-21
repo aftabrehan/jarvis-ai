@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import axios from 'axios'
 import { toast } from 'sonner'
 import { Check, Zap } from 'lucide-react'
 
@@ -21,6 +20,7 @@ import { LoadingSpinner } from '@/components/loading-spinner'
 import { useProModal } from '@/hooks/use-pro-modal'
 import { cn } from '@/lib/utils'
 import { TOOLS } from '@/constants'
+import { getJson, isApiError } from '@/lib/api-client'
 
 export const ProModal = () => {
   const proModal = useProModal()
@@ -30,15 +30,15 @@ export const ProModal = () => {
     try {
       setIsLoading(true)
 
-      const response = await axios.get('/api/stripe')
+      const response = await getJson<{ url: string }>('/api/stripe')
 
-      window.location.href = response.data.url
+      window.location.assign(response.url)
     } catch (error: unknown) {
       setIsLoading(false)
-      toast.error('Something went wrong.')
+      toast.error(isApiError(error) ? error.message : 'Something went wrong.')
       console.error('[STRIPE_CLIENT_ERROR]: ', error)
     } finally {
-      setTimeout(() => setIsLoading(false), 1500)
+      setIsLoading(false)
     }
   }
 

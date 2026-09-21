@@ -4,18 +4,24 @@ export {}
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      OPENAI_API_KEY: string
+      ENABLE_DEMO_FALLBACK?: string
 
-      REPLICATE_API_TOKEN: string
+      OPENAI_API_KEY?: string
+      OPENAI_TEXT_MODEL?: string
+      OPENAI_IMAGE_MODEL?: string
 
-      DATABASE_URL: string
+      REPLICATE_API_TOKEN?: string
+      REPLICATE_VIDEO_MODEL?: string
+      REPLICATE_MUSIC_MODEL?: string
 
-      STRIPE_API_SECRET_KEY: string
-      STRIPE_WEBHOOK_SECRET: string
+      DATABASE_URL?: string
 
-      NEXT_PUBLIC_APP_URL: string
+      STRIPE_API_SECRET_KEY?: string
+      STRIPE_WEBHOOK_SECRET?: string
 
-      NEXT_PUBLIC_CRISP_WEBSITE_ID: string
+      NEXT_PUBLIC_APP_URL?: string
+
+      NEXT_PUBLIC_CRISP_WEBSITE_ID?: string
     }
   }
 }

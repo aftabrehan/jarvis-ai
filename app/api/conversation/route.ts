@@ -1,48 +1,61 @@
-import { auth } from '@clerk/nextjs'
+import { auth } from '@clerk/nextjs/server'
 import { type NextRequest, NextResponse } from 'next/server'
-import { Configuration, OpenAIApi } from 'openai'
 
-import { increaseApiLimit, checkApiLimit } from '@/lib/api-limit'
+import { checkApiLimit, increaseApiLimit } from '@/lib/api-limit'
+import { jsonError, providerError, validationError } from '@/lib/api-response'
+import {
+  createDemoConversation,
+  isDemoFallbackEnabled,
+} from '@/lib/demo-generation'
+import { getOpenAI } from '@/lib/openai'
 import { checkSubscription } from '@/lib/subscription'
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-
-const openai = new OpenAIApi(configuration)
+import { chatRequestSchema } from '@/schemas'
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = auth()
+    const { userId } = await auth()
+    if (!userId) return jsonError('Unauthorized.', 401)
 
-    const body = await req.json()
-    const { messages } = body
+    const parsed = chatRequestSchema.safeParse(await req.json())
+    if (!parsed.success) return validationError()
 
-    if (!userId) return new NextResponse('Unauthorized.', { status: 401 })
-    if (!configuration.apiKey)
-      return new NextResponse('OpenAI api key not configured.', {
-        status: 500,
+    const [freeTrial, isPro] = await Promise.all([
+      checkApiLimit(),
+      checkSubscription(),
+    ])
+    if (!freeTrial && !isPro) return jsonError('Free trial has expired.', 403)
+
+    const prompt = parsed.data.messages.at(-1)?.content ?? ''
+    const openai = getOpenAI()
+    if (!openai) {
+      return isDemoFallbackEnabled()
+        ? NextResponse.json(createDemoConversation(prompt))
+        : jsonError('OpenAI API key is not configured.', 503)
+    }
+
+    let response
+    try {
+      response = await openai.chat.completions.create({
+        model: process.env.OPENAI_TEXT_MODEL ?? 'gpt-4.1-mini',
+        messages: parsed.data.messages,
       })
-
-    if (!messages)
-      return new NextResponse('Messages are required.', { status: 400 })
-
-    const freeTrial = await checkApiLimit()
-    const isPro = await checkSubscription()
-
-    if (!freeTrial && !isPro)
-      return new NextResponse('Free trial has expired.', { status: 403 })
-
-    const response = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      messages,
-    })
+    } catch (error: unknown) {
+      return isDemoFallbackEnabled()
+        ? NextResponse.json(createDemoConversation(prompt))
+        : providerError(error)
+    }
+    const content = response.choices[0]?.message.content
+    if (!content) {
+      return isDemoFallbackEnabled()
+        ? NextResponse.json(createDemoConversation(prompt))
+        : jsonError('The model returned an empty response.', 502)
+    }
 
     if (!isPro) await increaseApiLimit()
 
-    return NextResponse.json(response.data.choices[0].message, { status: 200 })
+    return NextResponse.json({ role: 'assistant', content })
   } catch (error: unknown) {
-    console.error('[CONVERSATION_ERROR]: ', error)
-    return new NextResponse(error?.toString(), { status: 500 })
+    console.error('[CONVERSATION_ERROR]:', error)
+    return jsonError('Unable to generate a response right now.', 500)
   }
 }

@@ -1,38 +1,23 @@
-import { auth } from '@clerk/nextjs'
+import { auth } from '@clerk/nextjs/server'
 
 import { MAX_FREE_COUNTS } from '@/constants'
 
 import { db } from './db'
 
 export const increaseApiLimit = async () => {
-  const { userId } = auth()
+  const { userId } = await auth()
 
   if (!userId) return
 
-  const userApiLimit = await db.userApiLimit.findUnique({
-    where: {
-      userId,
-    },
+  await db.userApiLimit.upsert({
+    where: { userId },
+    create: { userId, count: 1 },
+    update: { count: { increment: 1 } },
   })
-
-  if (userApiLimit) {
-    await db.userApiLimit.update({
-      where: {
-        userId,
-      },
-      data: {
-        count: userApiLimit.count + 1,
-      },
-    })
-  } else {
-    await db.userApiLimit.create({
-      data: { userId, count: 1 },
-    })
-  }
 }
 
 export const checkApiLimit = async () => {
-  const { userId } = auth()
+  const { userId } = await auth()
 
   if (!userId) return false
 
@@ -46,7 +31,7 @@ export const checkApiLimit = async () => {
 }
 
 export const getApiLimitCount = async () => {
-  const { userId } = auth()
+  const { userId } = await auth()
 
   if (!userId) return 0
 

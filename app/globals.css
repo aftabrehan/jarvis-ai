@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config "../tailwind.config.mts";
+@import "tailwindcss";
+@import "tw-animate-css";
 
 html,
 body,

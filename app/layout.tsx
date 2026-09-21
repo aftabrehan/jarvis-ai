@@ -1,5 +1,4 @@
 import { ClerkProvider } from '@clerk/nextjs'
-import { Inter } from 'next/font/google'
 import type { Metadata } from 'next'
 import type { PropsWithChildren } from 'react'
 
@@ -10,20 +9,17 @@ import { ToasterProvider } from '@/providers/toaster-provider'
 
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
-
 export const metadata: Metadata = siteConfig
 
 const RootLayout = ({ children }: PropsWithChildren) => (
   <ClerkProvider
     appearance={{
       variables: { colorPrimary: '#6C5BEE' },
-      layout: { logoPlacement: 'none' },
     }}
   >
     <html lang="en">
       <CrispProvider />
-      <body className={inter.className}>
+      <body className="font-sans">
         <ModalProvider />
         <ToasterProvider />
         {children}

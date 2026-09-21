@@ -3,16 +3,11 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Montserrat } from 'next/font/google'
 import { useAuth } from '@clerk/nextjs'
 import { ArrowRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/loading-spinner'
-
-import { cn } from '@/lib/utils'
-
-const font = Montserrat({ weight: '600', subsets: ['latin'] })
 
 export const LandingNavbar = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -28,12 +23,10 @@ export const LandingNavbar = () => {
     <nav className="p-4 bg-transparent flex items-center justify-between">
       <Link href="/" className="flex items-center">
         <div className="relative h-8 w-8 mr-4">
-          <Image src="/logo.png" alt="Jarvis logo" fill />
+          <Image src="/logo.png" alt="Jarvis logo" fill sizes="32px" />
         </div>
 
-        <h1 className={cn('text-2xl font-bold text-white', font.className)}>
-          Jarvis
-        </h1>
+        <h1 className="text-2xl font-bold text-white">Jarvis</h1>
       </Link>
 
       <Button className="rounded-full gap-x-1" asChild onClick={showLoading}>

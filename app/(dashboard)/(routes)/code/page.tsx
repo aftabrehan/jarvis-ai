@@ -2,17 +2,16 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import axios from 'axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import ReactMarkdown from 'react-markdown'
 import { toast } from 'sonner'
 import { Code } from 'lucide-react'
-import type { ChatCompletionRequestMessage } from 'openai'
 
 import { BotAvatar } from '@/components/bot-avatar'
 import { Empty } from '@/components/empty'
+import { DemoNotice } from '@/components/demo-notice'
 import { Heading } from '@/components/heading'
 import { Loader } from '@/components/loader'
 import { UserAvatar } from '@/components/user-avatar'
@@ -22,12 +21,14 @@ import { Input } from '@/components/ui/input'
 
 import { useProModal } from '@/hooks/use-pro-modal'
 import { cn } from '@/lib/utils'
+import { isApiError, postJson } from '@/lib/api-client'
+import type { ChatMessage } from '@/lib/chat'
 import { codeFormSchema } from '@/schemas'
 
 const CodePage = () => {
   const proModal = useProModal()
   const router = useRouter()
-  const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([])
+  const [messages, setMessages] = useState<ChatMessage[]>([])
 
   const form = useForm<z.infer<typeof codeFormSchema>>({
     resolver: zodResolver(codeFormSchema),
@@ -38,20 +39,22 @@ const CodePage = () => {
 
   const onSubmit = async (values: z.infer<typeof codeFormSchema>) => {
     try {
-      const userMessage: ChatCompletionRequestMessage = {
+      const userMessage: ChatMessage = {
         role: 'user',
         content: values.prompt,
       }
 
       const newMessages = [...messages, userMessage]
 
-      const response = await axios.post('/api/code', { messages: newMessages })
+      const response = await postJson<ChatMessage>('/api/code', {
+        messages: newMessages,
+      })
 
-      setMessages(current => [...current, userMessage, response.data])
+      setMessages(current => [...current, userMessage, response])
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error?.response?.status === 403)
+      if (isApiError(error) && error.status === 403)
         proModal.onOpen()
-      else toast.error('Something went wrong.')
+      else toast.error(isApiError(error) ? error.message : 'Something went wrong.')
 
       console.error(error)
     } finally {
@@ -105,6 +108,8 @@ const CodePage = () => {
           </form>
         </Form>
 
+        {messages.some(message => message.demo) && <DemoNotice />}
+
         <div className="space-y-4 mt-4">
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
@@ -115,9 +120,9 @@ const CodePage = () => {
             <Empty label="No conversation started." />
           )}
           <div className="flex flex-col-reverse gap-y-4">
-            {messages.map(message => (
+            {messages.map((message, index) => (
               <div
-                key={message.content}
+                key={`${message.role}-${index}-${message.content}`}
                 className={cn(
                   'p-8 w-full flex items-start gap-x-8 rounded-lg',
                   message.role === 'user'
@@ -126,26 +131,24 @@ const CodePage = () => {
                 )}
               >
                 {message.role === 'user' ? <UserAvatar /> : <BotAvatar />}
-                <p className="text-sm">
+                <div className="min-w-0 flex-1 text-sm">
                   <ReactMarkdown
                     components={{
-                      pre: ({ node, ...props }) => (
+                      pre: ({ children }) => (
                         <div className="overflow-auto w-full my-2 bg-black/10 p-2 rounded-lg">
-                          <pre {...props} />
+                          <pre>{children}</pre>
                         </div>
                       ),
-                      code: ({ node, ...props }) => (
-                        <code
-                          className="bg-black/10 rounded-lg p-1"
-                          {...props}
-                        />
+                      code: ({ children, className }) => (
+                        <code className={cn('bg-black/10 rounded-lg p-1', className)}>
+                          {children}
+                        </code>
                       ),
                     }}
-                    className="text-sm overflow-hidden leading-7"
                   >
-                    {message.content || ''}
+                    {message.content}
                   </ReactMarkdown>
-                </p>
+                </div>
               </div>
             ))}
           </div>

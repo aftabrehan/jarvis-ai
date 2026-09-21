@@ -1,8 +1,8 @@
 import {
   Code,
-  Github,
+  CodeXml,
   ImageIcon,
-  Linkedin,
+  BriefcaseBusiness,
   LayoutDashboard,
   MessageSquare,
   Music,
@@ -105,12 +105,12 @@ export const FOOTER_LINKS = [
   },
   {
     name: 'Linkedin',
-    icon: Linkedin,
+    icon: BriefcaseBusiness,
     link: 'https://linkedin.com/in/aftabrehan',
   },
   {
     name: 'Github',
-    icon: Github,
+    icon: CodeXml,
     link: 'https://github.com/aftabrehan/jarvis-ai',
   },
 ]

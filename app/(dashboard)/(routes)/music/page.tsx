@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import axios from 'axios'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -10,6 +9,7 @@ import { toast } from 'sonner'
 import { Music } from 'lucide-react'
 
 import { Empty } from '@/components/empty'
+import { DemoNotice } from '@/components/demo-notice'
 import { Heading } from '@/components/heading'
 import { Loader } from '@/components/loader'
 import { Button } from '@/components/ui/button'
@@ -18,11 +18,13 @@ import { Input } from '@/components/ui/input'
 
 import { useProModal } from '@/hooks/use-pro-modal'
 import { musicFormSchema } from '@/schemas'
+import { isApiError, postJson } from '@/lib/api-client'
 
 const MusicPage = () => {
   const proModal = useProModal()
   const router = useRouter()
   const [music, setMusic] = useState<string>()
+  const [isDemo, setIsDemo] = useState(false)
 
   const form = useForm<z.infer<typeof musicFormSchema>>({
     resolver: zodResolver(musicFormSchema),
@@ -34,14 +36,19 @@ const MusicPage = () => {
   const onSubmit = async (values: z.infer<typeof musicFormSchema>) => {
     try {
       setMusic(undefined)
+      setIsDemo(false)
 
-      const response = await axios.post('/api/music', values)
+      const response = await postJson<{ url: string; demo?: boolean }>(
+        '/api/music',
+        values
+      )
 
-      setMusic(response.data.audio)
+      setMusic(response.url)
+      setIsDemo(!!response.demo)
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error?.response?.status === 403)
+      if (isApiError(error) && error.status === 403)
         proModal.onOpen()
-      else toast.error('Something went wrong.')
+      else toast.error(isApiError(error) ? error.message : 'Something went wrong.')
 
       console.error(error)
     } finally {
@@ -96,6 +103,8 @@ const MusicPage = () => {
             </form>
           </Form>
         </div>
+
+        {isDemo && <DemoNotice />}
 
         <div className="space-y-4 mt-4">
           {isLoading && (

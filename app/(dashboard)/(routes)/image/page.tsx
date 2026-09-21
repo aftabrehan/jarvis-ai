@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { Download, ImageIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -11,6 +10,7 @@ import { toast } from 'sonner'
 import * as z from 'zod'
 
 import { Empty } from '@/components/empty'
+import { DemoNotice } from '@/components/demo-notice'
 import { Heading } from '@/components/heading'
 import { Loader } from '@/components/loader'
 import { Button } from '@/components/ui/button'
@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/select'
 import { useProModal } from '@/hooks/use-pro-modal'
 import { imageFormSchema } from '@/schemas'
+import { isApiError, postJson } from '@/lib/api-client'
 
 const amountOptions = [
   { value: '1', label: '1 Photo' },
@@ -36,19 +37,20 @@ const amountOptions = [
 ]
 
 const resolutionOptions = [
-  { value: '256x256', label: '256x256' },
-  { value: '512x512', label: '512x512' },
   { value: '1024x1024', label: '1024x1024' },
+  { value: '1536x1024', label: '1536x1024 (landscape)' },
+  { value: '1024x1536', label: '1024x1536 (portrait)' },
 ]
 
 const ImagePage = () => {
   const proModal = useProModal()
   const router = useRouter()
   const [images, setImages] = useState<string[]>([])
+  const [isDemo, setIsDemo] = useState(false)
 
   const form = useForm<z.infer<typeof imageFormSchema>>({
     resolver: zodResolver(imageFormSchema),
-    defaultValues: { prompt: '', amount: '1', resolution: '512x512' },
+    defaultValues: { prompt: '', amount: '1', resolution: '1024x1024' },
   })
 
   const isLoading = form.formState.isSubmitting
@@ -56,16 +58,21 @@ const ImagePage = () => {
   const onSubmit = async (values: z.infer<typeof imageFormSchema>) => {
     try {
       setImages([])
+      setIsDemo(false)
 
-      const response = await axios.post('/api/image', values)
+      const response = await postJson<Array<{ url: string; demo?: boolean }>>(
+        '/api/image',
+        values
+      )
 
-      const urls = response.data.map((image: { url: string }) => image.url)
+      const urls = response.map(image => image.url)
 
       setImages(urls)
+      setIsDemo(response.some(image => image.demo))
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error?.response?.status === 403)
+      if (isApiError(error) && error.status === 403)
         proModal.onOpen()
-      else toast.error('Something went wrong.')
+      else toast.error(isApiError(error) ? error.message : 'Something went wrong.')
 
       console.error(error)
     } finally {
@@ -179,6 +186,8 @@ const ImagePage = () => {
           </Form>
         </div>
 
+        {isDemo && <DemoNotice />}
+
         <div className="space-y-4 mt-4">
           {isLoading && (
             <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
@@ -193,14 +202,21 @@ const ImagePage = () => {
             {images.map((src, i) => (
               <Card key={src} className="rounded-lg overflow-hidden">
                 <div className="relative aspect-square">
-                  <Image src={src} alt={`Generated image ${i + 1}`} fill />
+                  <Image
+                    src={src}
+                    alt={`Generated image ${i + 1}`}
+                    fill
+                    sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                    unoptimized={src.startsWith('data:')}
+                  />
                 </div>
 
                 <CardFooter className="p-2">
                   <Button
                     variant="secondary"
                     className="w-full"
-                    onClick={() => window.open(src)}
+                    onClick={() => window.open(src, '_blank', 'noopener,noreferrer')}
                   >
                     <Download className="h-4 w-4 mr-2" />
                     Download

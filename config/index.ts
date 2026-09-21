@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const siteConfig: Metadata = {
   title: 'Jarvis AI',
-  description: 'A Modern SaaS AI Platform Build with Next.js 14.',
+  description: 'A modern SaaS AI platform built with Next.js.',
   keywords: [
     'reactjs',
     'nextjs',
@@ -28,7 +28,7 @@ export const siteConfig: Metadata = {
     'prettier',
     'react-dom',
     'tailwindcss',
-    'tailwindcss-animate',
+    'tw-animate-css',
     'ui/ux',
     'js',
     'javascript',

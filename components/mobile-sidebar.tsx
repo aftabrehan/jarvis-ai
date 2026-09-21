@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { Menu } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -16,14 +15,6 @@ export const MobileSidebar = ({
   apiLimitCount = 0,
   isPro = false,
 }: MobileSidebarProps) => {
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted) return null
-
   return (
     <Sheet>
       <SheetTrigger asChild>
